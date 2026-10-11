@@ -1,9 +1,18 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 export default function ProtectedRoute({ userData, children }) {
+  const location = useLocation();
+
   if (!userData) {
-    return <Navigate to="/login" replace />;
+    const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+
+    return (
+      <Navigate
+        to={`/Login?returnUrl=${encodeURIComponent(returnUrl)}`}
+        replace
+      />
+    );
   }
 
   return children;

@@ -1,10 +1,27 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Joi from "joi";
 
 export default function Login({ saveUserData }) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Restore the page the user originally wanted, but only allow internal paths.
+  function getSafeReturnUrl() {
+    const returnUrl = searchParams.get("returnUrl");
+
+    if (
+      returnUrl &&
+      returnUrl.startsWith("/") &&
+      !returnUrl.startsWith("//") &&
+      !returnUrl.startsWith("/\\")
+    ) {
+      return returnUrl;
+    }
+
+    return "/";
+  }
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -71,7 +88,7 @@ export default function Login({ saveUserData }) {
       const loggedInUser = await saveUserData();
 
       if (loggedInUser) {
-        navigate("/", { replace: true });
+        navigate(getSafeReturnUrl(), { replace: true });
       } else {
         setError([{ message: "Login succeeded, but user data could not be loaded." }]);
       }
