@@ -27,7 +27,7 @@ export default function Navbar({ userData, logOut }) {
           </Link>
 
           {userData && (
-            <button className="btn btn-outline-danger btn-sm" onClick={logOut}>
+            <button className="btn btn-danger btn-sm" onClick={logOut}>
               Logout
             </button>
           )}
