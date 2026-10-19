@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import Joi from "joi";
@@ -12,10 +11,10 @@ import {
   HelpCircle,
   Info,
   Landmark,
- 
 } from "lucide-react";
 
 import image from "../assets/Logo.png";
+
 export default function Login({ saveUserData }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -73,12 +72,27 @@ export default function Login({ saveUserData }) {
         .required()
         .messages({
           "string.empty": "Password is required",
-          "string.min": "Password must be at least 6 characters",
+          "string.min":
+            "Password must be at least 6 characters",
           "any.required": "Password is required",
         }),
     });
 
-    return schema.validate(user, { abortEarly: false });
+    const validation = schema.validate(user, {
+      abortEarly: false,
+    });
+
+    const errors = validation.error?.details || [];
+
+    if (!rememberMe) {
+      errors.push({
+        message: isArabic
+          ? "يجب تفعيل خيار تذكرني قبل تسجيل الدخول."
+          : "Please check Remember Me before logging in.",
+      });
+    }
+
+    return errors;
   }
 
   async function postDataToApi() {
@@ -100,7 +114,8 @@ export default function Login({ saveUserData }) {
         setError([
           {
             message:
-              data?.message || "Token was not returned by the API",
+              data?.message ||
+              "Token was not returned by the API",
           },
         ]);
         return;
@@ -108,7 +123,7 @@ export default function Login({ saveUserData }) {
 
       localStorage.setItem("userToken", token);
 
-      // Never store the password in localStorage.
+      // Store the email only, never the password.
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", user.email);
       } else {
@@ -118,7 +133,8 @@ export default function Login({ saveUserData }) {
       if (typeof saveUserData !== "function") {
         setError([
           {
-            message: "Login succeeded, but user data loader is unavailable.",
+            message:
+              "Login succeeded, but user data loader is unavailable.",
           },
         ]);
         return;
@@ -127,7 +143,9 @@ export default function Login({ saveUserData }) {
       const loggedInUser = await saveUserData();
 
       if (loggedInUser) {
-        navigate(getSafeReturnUrl(), { replace: true });
+        navigate(getSafeReturnUrl(), {
+          replace: true,
+        });
       } else {
         localStorage.removeItem("userToken");
 
@@ -159,10 +177,14 @@ export default function Login({ saveUserData }) {
   function submitLoginForm(event) {
     event.preventDefault();
 
-    const validation = validateLoginForm();
+    const validationErrors = validateLoginForm();
 
-    if (validation.error) {
-      setError(validation.error.details);
+    if (validationErrors.length > 0) {
+      setError(
+        validationErrors.map((err) => ({
+          message: err.message,
+        }))
+      );
       return;
     }
 
@@ -187,7 +209,6 @@ export default function Login({ saveUserData }) {
             />
           </div>
 
-         
           <span className="ml-8 hidden rounded-full border border-teal-100 bg-gradient-to-r from-[#d9fbf7] to-[#b5f4ef] px-7 py-2 font-semibold tracking-wide text-teal-800 shadow-sm lg:inline-block">
             Institutional
           </span>
@@ -195,7 +216,10 @@ export default function Login({ saveUserData }) {
 
         <div className="flex items-center gap-4">
           <div className="hidden items-center gap-3 rounded-full bg-slate-50 px-4 py-2 text-sm text-slate-600 lg:flex">
-            <ShieldCheck size={32} className="text-teal-700" />
+            <ShieldCheck
+              size={32}
+              className="text-teal-700"
+            />
             Authorized Academic Environment
           </div>
 
@@ -258,7 +282,9 @@ export default function Login({ saveUserData }) {
 
             <p className="text-base leading-6 text-gray-600 sm:text-lg">
               <strong className="text-[#182238]">
-                {isArabic ? "تنبيه الجامعة: " : "University Notice: "}
+                {isArabic
+                  ? "تنبيه الجامعة: "
+                  : "University Notice: "}
               </strong>
 
               {isArabic
@@ -268,7 +294,11 @@ export default function Login({ saveUserData }) {
           </div>
 
           {/* Login Form */}
-          <form onSubmit={submitLoginForm} className="space-y-6">
+          <form
+            onSubmit={submitLoginForm}
+            className="space-y-6"
+          >
+            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -290,6 +320,7 @@ export default function Login({ saveUserData }) {
                   name="email"
                   type="email"
                   autoComplete="username"
+                  required
                   value={user.email}
                   onChange={getUserData}
                   placeholder="student.id@university.edu"
@@ -298,6 +329,7 @@ export default function Login({ saveUserData }) {
               </div>
             </div>
 
+            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -317,6 +349,8 @@ export default function Login({ saveUserData }) {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
+                  required
+                  minLength={6}
                   value={user.password}
                   onChange={getUserData}
                   placeholder={
@@ -329,9 +363,13 @@ export default function Login({ saveUserData }) {
 
                 <button
                   type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
+                  onClick={() =>
+                    setShowPassword((prev) => !prev)
+                  }
                   aria-label={
-                    showPassword ? "Hide password" : "Show password"
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
                   }
                   className="shrink-0 rounded-lg p-1 text-gray-500 transition-colors hover:bg-blue-50 hover:text-blue-700"
                 >
@@ -350,7 +388,9 @@ export default function Login({ saveUserData }) {
                 <input
                   type="checkbox"
                   checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
+                  onChange={(e) =>
+                    setRememberMe(e.target.checked)
+                  }
                   className="h-11 w-11 cursor-pointer accent-[#083db9]"
                 />
 
@@ -370,7 +410,9 @@ export default function Login({ saveUserData }) {
                 }
                 className="text-sm font-semibold text-blue-700 underline-offset-4 transition-colors hover:text-blue-900 hover:underline"
               >
-                {isArabic ? "نسيت كلمة المرور؟" : "Forgot Password?"}
+                {isArabic
+                  ? "نسيت كلمة المرور؟"
+                  : "Forgot Password?"}
               </button>
             </div>
 
@@ -391,7 +433,12 @@ export default function Login({ saveUserData }) {
             {/* Login Button */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={
+                loading ||
+                !user.email.trim() ||
+                !user.password ||
+                !rememberMe
+              }
               className="h-[69px] w-full rounded-2xl bg-gradient-to-r from-[#0a43c5] to-[#0736a6] text-xl font-bold text-white shadow-lg shadow-blue-900/20 transition-all duration-200 hover:-translate-y-0.5 hover:from-[#083bb4] hover:to-[#052d8e] hover:shadow-xl hover:shadow-blue-900/25 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {loading
