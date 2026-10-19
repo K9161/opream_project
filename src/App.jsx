@@ -16,7 +16,7 @@ import Students from "./pages/Students";
 import TrainingSeasons from "./pages/TrainingSeasons";
 import ImportStudents from "./pages/ImportStudents";
 import Notfound from "./pages/Notfound";
-
+import "./index.css";
 export default function App() {
   const [userData, setUserData] = useState(null);
 
