@@ -19,7 +19,6 @@ export default function ConfirmModal({ open, title, body, confirmLabel, onConfir
             {children}
           </div>
         </div>
-
         <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-4">
           <button type="button" onClick={onCancel} className="rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
             {t("cancel")}
