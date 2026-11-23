@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  color: #1e293b;
+  background: #faf9ff;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; min-height: 100vh; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px; line-height: 1.55; }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+input::placeholder, textarea::placeholder { opacity: 1; color: #64748b; }
+
+/* Keep the existing IBM Plex Sans identity while making dense dashboard text easier to read. */
+[class~="text-[10px]"] { font-size: 0.72rem !important; line-height: 1.45 !important; }
+[class~="text-[11px]"] { font-size: 0.78rem !important; line-height: 1.55 !important; }
+[class~="text-xs"] { font-size: 0.84rem !important; line-height: 1.5 !important; }
+[class~="text-sm"] { font-size: 0.94rem !important; line-height: 1.55 !important; }
+[class~="text-lg"] { line-height: 1.35 !important; }
+
+:focus-visible { outline: 3px solid rgb(59 130 246 / 35%); outline-offset: 2px; }
