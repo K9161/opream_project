@@ -29,6 +29,7 @@ export default function ConfirmModal({ open, title, body, confirmLabel, onConfir
           </button>
         </div>
       </div>
+      
     </div>
   );
 }
