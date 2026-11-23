@@ -98,11 +98,28 @@ export default function ApplyInternship() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700"><Laptop size={24}/></span>
           <div className="min-w-0 flex-1">
-            <div className="mb-2 flex flex-wrap items-center gap-2"><span className="rounded-full bg-teal-100 px-4 py-1.5 text-[10px] font-semibold text-teal-800"><BadgeCheck size={12} className="me-1 inline"/>{t("verifiedPartner")}</span><span className="text-xs text-slate-600">Term: {isAr ? "صيف 2026" : "Summer 2026"}</span></div>
-            <h1 className="text-sm font-semibold text-slate-900">{t("applyFor")}</h1>
-            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-[11px] text-slate-500"><span className="flex items-center gap-1"><MapPin size={12}/>{isAr ? "سمارت فيليدج، الجيزة" : "Smart Village, Cairo"}</span><span className="flex items-center gap-1"><CalendarClock size={12}/>{t("fullTime")}</span></div>
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-teal-100 px-4 py-1.5 text-[10px] font-semibold text-teal-800">
+                <BadgeCheck size={12} className="me-1 inline" />
+                {t("verifiedPartner")}
+              </span>
+              <span className="text-xs text-slate-600">
+                {isAr ? "الفصل: صيف 2026" : "Term: Summer 2026"}
+              </span>
+            </div>
+            <h1 className="text-sm font-semibold text-slate-900">
+              {isAr ? "التقديم على تدريب تطوير الواجهات الأمامية في ITI" : "Applying for Frontend Development Internship at ITI"}
+            </h1>
+            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-[11px] text-slate-500">
+              <span className="flex items-center gap-1"><MapPin size={12}/>{isAr ? "القرية الذكية، القاهرة" : "Smart Village, Cairo"}</span>
+              <span className="flex items-center gap-1"><CalendarClock size={12}/>{isAr ? "دوام كامل (12 أسبوعًا)" : "Full-time (12 Weeks)"}</span>
+            </div>
           </div>
-          <div className="border-t border-slate-200 pt-3 sm:border-s sm:border-t-0 sm:ps-5 sm:pt-0"><p className="text-[10px] text-slate-500">{t("deadline")}</p><p className="mt-1 text-sm font-bold text-rose-700">{isAr ? "30 يونيو 2026" : "June 30, 2026"}</p><p className="mt-1 text-[10px] text-slate-500">{isAr ? "12 يومًا متبقيًا" : "12 days remaining"}</p></div>
+          <div className="border-t border-slate-200 pt-3 sm:border-s sm:border-t-0 sm:ps-5 sm:pt-0">
+            <p className="text-[10px] text-slate-500">{t("deadline")}</p>
+            <p className="mt-1 text-sm font-bold text-rose-700">{isAr ? "30 يونيو 2026" : "June 30, 2026"}</p>
+            <p className="mt-1 text-[10px] text-slate-500">{isAr ? "12 يومًا متبقيًا" : "12 days remaining"}</p>
+          </div>
         </div>
       </div>
 
@@ -121,7 +138,7 @@ export default function ApplyInternship() {
       <form onSubmit={requestSubmit} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <h2 className="mb-5 flex items-center gap-2 border-b border-slate-200 pb-3 text-sm font-bold text-slate-800"><FilePenLine size={18} className="text-blue-700"/>{t("candidateSubmissions")}</h2>
         <label className="mb-2 block text-xs font-semibold text-slate-800" htmlFor="academic-track">{t("trackPreference")} <span className="text-rose-600">*</span></label>
-        <select id="academic-track" value={track} onChange={e => setTrack(e.target.value)} className="mb-2 w-full rounded-lg border border-slate-200 bg-[#e0f1fa] px-3 py-3 text-xs text-slate-800 outline-none focus:border-blue-500 sm:max-w-2xl">
+        <select id="academic-track" value={track} onChange={e => setTrack(e.target.value)} className="mb-2 w-full rounded-lg border border-slate-200 bg-[#e0f1fa] px-3 py-3 text-xs text-slate-800 outline-none focus:border-blue-500">
           <option value="webTrack">{t("webTrack")}</option><option value="mobileTrack">{t("mobileTrack")}</option><option value="dataTrack">{t("dataTrack")}</option>
         </select>
         <p className="mb-6 text-[11px] text-slate-500">{t("trackHelp")}</p>

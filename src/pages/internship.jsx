@@ -88,7 +88,6 @@ export default function Internship() {
               <div className="ms-auto flex items-center gap-2">
                 <button onClick={()=>shareInternship(item.id)} aria-label="Share internship" title={copiedId===item.id ? t("copied") : t("share")} className="flex h-9 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Share2 size={15}/></button>
                 <Link to={`/internship/${item.id}`} className="rounded-lg px-4 py-2.5 text-center text-xs font-semibold text-blue-700 no-underline hover:bg-blue-50">{t("viewDetails")}</Link>
-                {!passed && !applied && <Link to={`/internship/${item.id}/apply`} className="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-xs font-semibold text-white no-underline hover:bg-blue-700">{t("applyNow")}</Link>}
               </div>
             </div>
             <Link to={`/internship/${item.id}`} className="text-slate-800 no-underline hover:text-blue-700"><h2 className="mb-4 text-lg font-bold">{t(item.key)}</h2></Link>

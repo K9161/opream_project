@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -19,7 +18,6 @@ import InternshipDetails from "./pages/InternshipDetails";
 import ApplyInternship from "./pages/ApplyInternship";
 import ExamTaking from "./pages/ExamTaking";
 import Students from "./pages/Students";
-import TrainingSeasons from "./pages/TrainingSeasons";
 import ImportStudents from "./pages/ImportStudents";
 import Notfound from "./pages/Notfound";
 import "./index.css";
@@ -177,14 +175,6 @@ export default function App() {
           element: (
             <ProtectedRoute userData={userData} loading={authLoading}>
               <Students />
-            </ProtectedRoute>
-          ),
-        },
-        {
-          path: "training-seasons",
-          element: (
-            <ProtectedRoute userData={userData} loading={authLoading}>
-              <TrainingSeasons />
             </ProtectedRoute>
           ),
         },

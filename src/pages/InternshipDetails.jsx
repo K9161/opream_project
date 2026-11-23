@@ -45,8 +45,6 @@ export default function InternshipDetails() {
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 text-xs font-bold italic text-white">ITI</div>
           <span className="text-xs font-semibold italic text-slate-700">{t("organization")}</span>
           <div className="ms-auto flex items-center gap-2">
-            <button onClick={share} title={copied ? t("copied") : t("share")} className="flex h-10 w-11 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Share2 size={16}/></button>
-            <Link to={`/internship/${id}/apply`} className="rounded-lg bg-blue-700 px-6 py-3 text-xs font-semibold text-white no-underline shadow-sm transition hover:bg-blue-800">{t("apply")}</Link>
           </div>
         </div>
 
