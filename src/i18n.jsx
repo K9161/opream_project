@@ -76,7 +76,7 @@ const translations = {
 
 const I18nContext = createContext(null);
 export function I18nProvider({ children }) {
-  const [language, setLanguage] = useState(() => localStorage.getItem("opream-language") || "en");
+  const [language, setLanguage] = useState(() => localStorage.getItem("opream-language") || "ar");
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";

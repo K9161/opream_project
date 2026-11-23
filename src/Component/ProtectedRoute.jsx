@@ -3,12 +3,6 @@ import { Navigate, useLocation } from "react-router-dom";
 export default function ProtectedRoute({ userData, loading = false, children }) {
   const location = useLocation();
 
-  // TEMPORARY PREVIEW: Skip login while developing or checking the UI.
-  // Remove this block before deploying the project to production.
-  if (import.meta.env.DEV) {
-    return children;
-  }
-
   // Wait for the saved session to be checked before redirecting.
   if (loading) {
     return (
