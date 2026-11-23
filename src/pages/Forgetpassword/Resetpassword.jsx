@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import './ResetandState.css'
 import { useI18n } from '../../i18n'
+import logo from '../../assets/Logo.png'
 
 const text = {
   en: {
@@ -70,13 +71,6 @@ const svgProps = {
   strokeLinecap: 'round',
   strokeLinejoin: 'round',
 }
-
-const CapIcon = () => (
-  <svg {...svgProps} width="27" height="27">
-    <path d="M12 3 3 8l9 5 9-5-9-5Z" />
-    <path d="M7 10.5V15c0 1.5 2.2 3 5 3s5-1.5 5-3v-4.5" />
-  </svg>
-)
 
 const ShieldCheckIcon = () => (
   <svg {...svgProps} width="24" height="24">
@@ -174,14 +168,10 @@ export default function ResetPassword() {
     <div className="forgot-page">
       <header className="forgot-header">
         <div className="brand">
-          <div className="brand-logo"><CapIcon /></div>
-          <div>
-            <div className="brand-name">
-              {t.brand}
-              <span className="chip">{t.institutional}</span>
-            </div>
-            <div className="brand-tagline">{t.tagline}</div>
+          <div className="brand-logo">
+            <img src={logo} alt="Opream Web" />
           </div>
+          <span className="chip">{t.institutional}</span>
         </div>
 
         <div className="header-end">
