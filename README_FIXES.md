@@ -22,5 +22,9 @@
 
 - The login request currently targets `POST /api/auth/login` on `VITE_API_BASE_URL`.
 - The backend must return an access token. A refresh token is currently expected by the login screen as well.
+- Exam-taking now requires `GET /api/exams/:id` to return an authorized exam with a server-created attempt and an absolute `attempt.expires_at` deadline. Return question IDs, prompt text, option IDs/labels, and points only; never send correct answers or grading keys. The exam route rejects scheduled, expired, missing, or unauthorized exams.
+- Exam submission now sends `POST /api/exams/:id/submit` with `{ answers: [{ questionId, optionId }] }`. The backend must validate the attempt and official deadline, grade answers privately, persist a single submission, and return the result. Browser countdown/autosubmit is only UX; the server deadline must remain authoritative.
+- The application limit is currently enforced against this browser's `localStorage` data for the Summer 2026 season. The production API must also enforce the three-application limit atomically per student and season; client-side storage is not a security or cross-device control.
+- Login role redirects use the available sections: admin/college_admin to `/students`, company/company_admin to `/applications`, mentor to `/exams`, and student to `/internship`. Confirm these destinations against the SRS and implement dedicated dashboards/authorization as needed.
 - The actual password-reset request and password-update endpoints have not been supplied, so those screens remain frontend-only.
 - Role-specific dashboards and API-backed Applications/Notifications pages are not implemented in this source archive.

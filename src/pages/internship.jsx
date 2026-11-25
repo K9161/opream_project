@@ -7,7 +7,7 @@ const INTERNSHIPS = [
   { id: 1, key: "title", shortName: "ITI", organizationKey: "organization", trackKey: "web", locationKey: "cairo", deadline: "June 30, 2026", popularity: 142 },
   { id: 2, key: "backendInternship", shortName: "ITI", organizationKey: "organization", trackKey: "web", locationKey: "cairo", deadline: "November 30, 2024", popularity: 98 },
   { id: 3, key: "uxInternship", shortName: "ITI", organizationKey: "organization", trackKey: "web", locationKey: "cairo", deadline: "November 30, 2024", popularity: 76 },
-  { id: 4, key: "flutterInternship", shortName: "ITI", organizationKey: "organization", trackKey: "web", locationKey: "cairo", deadline: "November 30, 2024", popularity: 54 },
+  { id: 4, key: "flutterInternship", shortName: "ITI", organizationKey: "organization", trackKey: "mobileTrack", locationKey: "cairo", deadline: "November 30, 2024", popularity: 54 },
 ];
 
 function readApplications() {

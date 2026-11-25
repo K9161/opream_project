@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Building2, CalendarDays, Check, FileUp, KeyRound, Phone, Mail, Save, ShieldCheck } from "lucide-react";
 import { useI18n } from "../i18n";
-import avatar from "../assets/profile.png";
 import ConfirmModal from "./ConfirmModal";
 
 const DEFAULT_STUDENT = {
@@ -34,7 +33,7 @@ function StepCard({ index, step, state, t }) {
   const subLabel = t(step[state === "done" ? "done" : state === "current" ? "current" : "upcoming"]);
 
   return (
-    <div className={`flex min-h-[64px] items-center gap-3 rounded-xl px-4 py-3 ${styles}`}>
+    <div className={`flex min-h-16 items-center gap-3 rounded-xl px-4 py-3 ${styles}`}>
       <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
         state === "done"
           ? "bg-emerald-800 text-white"
@@ -110,7 +109,9 @@ export default function Profile({ userData }) {
       {/* Student card */}
       <section className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-5">
-          <img src={avatar} alt={displayName} className="h-20 w-20 shrink-0 rounded-2xl object-cover" />
+          <div role="img" aria-label={displayName} className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-blue-700 to-indigo-500 text-2xl font-bold text-white shadow-sm">
+            {Array.from(String(displayName).trim())[0]?.toUpperCase() || "S"}
+          </div>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-xl font-bold text-slate-900">{displayName}</h1>
@@ -123,7 +124,7 @@ export default function Profile({ userData }) {
             </div>
           </div>
         </div>
-        <div className="rounded-2xl border border-indigo-200 bg-indigo-100/70 px-8 py-4 text-center md:min-w-[200px]">
+        <div className="rounded-2xl border border-indigo-200 bg-indigo-100/70 px-8 py-4 text-center md:min-w-50">
           <p className="text-sm font-medium text-slate-700">{t("gpa")}</p>
           <p className="mt-2 flex items-baseline justify-center gap-2">
             <span className="text-2xl font-bold text-blue-700">{Number(student.gpa).toFixed(2)}</span>

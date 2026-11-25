@@ -37,6 +37,14 @@ export default function Layout({ userData, logOut }) {
     </nav>
   ) : pathname.startsWith("/profile") ? (
     t("profileSettings")
+  ) : pathname.startsWith("/applications") ? (
+    t("applications")
+  ) : pathname.startsWith("/notifications") ? (
+    t("notifications")
+  ) : pathname.startsWith("/students") ? (
+    t("students")
+  ) : pathname.startsWith("/import-students") ? (
+    t("importStudents")
   ) : /^\/exams\/[^/]+\/take$/.test(pathname) ? (
     t("examPortal")
   ) : pathname.startsWith("/exams") ? (
@@ -54,7 +62,7 @@ export default function Layout({ userData, logOut }) {
       <div className="flex min-h-screen">
         <StudentSidebar logOut={logOut} />
         <div className="min-w-0 flex-1">
-          <header className="sticky top-0 z-20 flex min-h-[68px] flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white/95 px-5 py-3 shadow-[0_2px_10px_rgba(15,23,42,0.025)] backdrop-blur sm:px-8">
+          <header className="sticky top-0 z-20 flex min-h-17 flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white/95 px-5 py-3 shadow-[0_2px_10px_rgba(15,23,42,0.025)] backdrop-blur sm:px-8">
             <div className="min-w-0 text-sm font-semibold text-slate-700">{pageTitle}</div>
             <div className="flex shrink-0 items-center gap-3">
               <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1" aria-label={t("language")}>

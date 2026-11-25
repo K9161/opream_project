@@ -217,20 +217,22 @@ export default function Login({ saveUserData }) {
 
   // Redirect according to user role
   function getDashboardPath(loggedInUser) {
-    const role =
+    const rawRole =
       loggedInUser?.user?.role ||
-      loggedInUser?.role;
+      loggedInUser?.role ||
+      loggedInUser?.user?.user_type ||
+      loggedInUser?.user_type ||
+      loggedInUser?.user?.userType ||
+      loggedInUser?.userType;
+    const role = String(rawRole || "student").trim().toLowerCase().replace(/[\s-]+/g, "_");
 
     const roleRoutes = {
-      // These routes are the student-facing pages currently implemented.
       student: "/internship",
-      Student: "/internship",
-      college_admin: "/internship",
-      company_admin: "/internship",
-      mentor: "/internship",
-      "College Admin": "/internship",
-      "Company Admin": "/internship",
-      Mentor: "/internship",
+      admin: "/students",
+      college_admin: "/students",
+      company: "/applications",
+      company_admin: "/applications",
+      mentor: "/exams",
     };
 
     return roleRoutes[role] || "/internship";

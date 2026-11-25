@@ -2,49 +2,90 @@ import { useState } from "react";
 import { Clock3, MapPin } from "lucide-react";
 import { useI18n } from "../i18n";
 import DetailModal from "../Component/DetailModal";
+import ConfirmModal from "../Component/ConfirmModal";
 
 const APPLICATIONS = [
   {
     id: 1,
+    internshipId: 1,
+    isLive: true,
     organization: "Information Technology Institute",
     shortName: "ITI",
     title: "Frontend Development Internship",
     track: "Web Development",
     location: "Cairo / Hybrid",
     date: "June 25, 2026",
+    status: "exam_scheduled",
   },
   {
     id: 2,
+    internshipId: 2,
+    isLive: true,
     organization: "Information Technology Institute",
     shortName: "ITI",
     title: "Backend Development Internship",
     track: "Web Development",
     location: "Cairo / Hybrid",
     date: "June 26, 2026",
+    status: "screening",
   },
   {
     id: 3,
+    internshipId: 3,
+    isLive: true,
     organization: "Information Technology Institute",
     shortName: "ITI",
     title: "UI/UX Design Internship",
     track: "Web Development",
     location: "Cairo / Hybrid",
     date: "June 28, 2026",
+    status: "submitted",
   },
 ];
+
+function readApplications() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("opreamApplications") || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+function statusKey(status) {
+  const normalized = String(status || "submitted").toLowerCase().replace(/[\s-]+/g, "_");
+  const keys = {
+    submitted: "submitted",
+    pending: "submitted",
+    screening: "screeningStep",
+    exam_scheduled: "examScheduled",
+    approved: "approved",
+    accepted: "approved",
+    rejected: "rejected",
+    withdrawn: "withdrawn",
+  };
+  return keys[normalized] || "submitted";
+}
+
+const STATUS_STYLES = {
+  submitted: "bg-slate-100 text-slate-700",
+  screeningStep: "bg-sky-100 text-sky-800",
+  examScheduled: "bg-violet-100 text-violet-800",
+  approved: "bg-emerald-100 text-emerald-800",
+  rejected: "bg-rose-100 text-rose-800",
+  withdrawn: "bg-amber-100 text-amber-800",
+};
 
 export default function Applications() {
   const { t } = useI18n();
   const [detail, setDetail] = useState(null);
-
-  let saved;
-  try {
-    saved = JSON.parse(localStorage.getItem("opreamApplications") || "[]");
-  } catch {
-    saved = [];
-  }
-  const liveApplications = (Array.isArray(saved) ? saved : []).map((item, index) => ({
+  const [applications, setApplications] = useState(readApplications);
+  const [withdrawTarget, setWithdrawTarget] = useState(null);
+  const [withdrawnIds, setWithdrawnIds] = useState([]);
+  const liveApplications = applications.map((item, index) => ({
     id: `live-${index}`,
+    internshipId: item.internshipId,
+    isLive: true,
     organization: item.organization || "Information Technology Institute",
     shortName: item.shortName || "ITI",
     title: item.title || "Frontend Development Internship",
@@ -55,7 +96,17 @@ export default function Applications() {
     statement: item.statement,
     status: item.status,
   }));
-  const allApplications = [...liveApplications, ...APPLICATIONS];
+  const allApplications = [...liveApplications, ...APPLICATIONS].filter((app) => !withdrawnIds.includes(app.id));
+
+  function withdrawApplication() {
+    if (!withdrawTarget) return;
+    const updated = applications.filter((item) => String(item.internshipId) !== String(withdrawTarget.internshipId));
+    localStorage.setItem("opreamApplications", JSON.stringify(updated));
+    setApplications(updated);
+    setWithdrawnIds((previous) => [...previous, withdrawTarget.id]);
+    setDetail(null);
+    setWithdrawTarget(null);
+  }
 
   return (
     <section className="mx-auto max-w-6xl">
@@ -80,6 +131,9 @@ export default function Applications() {
                 <h3 className="text-lg font-bold text-slate-900 mb-1">
                   {app.title}
                 </h3>
+                <span className={`mb-3 inline-flex rounded-full px-3 py-1 text-[10px] font-semibold ${STATUS_STYLES[statusKey(app.status)]}`}>
+                  {t(statusKey(app.status))}
+                </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
                   <div className="flex items-center gap-1">
                     <span className="text-[10px] font-medium text-slate-400">
@@ -112,7 +166,16 @@ export default function Applications() {
         ))}
       </div>
 
-      <DetailModal open={Boolean(detail)} title={t("applicationDetails")} onClose={() => setDetail(null)}>
+      <DetailModal
+        open={Boolean(detail)}
+        title={t("applicationDetails")}
+        onClose={() => setDetail(null)}
+        footer={detail?.isLive && statusKey(detail.status) !== "withdrawn" ? (
+          <button type="button" onClick={() => setWithdrawTarget(detail)} className="rounded-lg bg-rose-700 px-4 py-2 text-xs font-semibold text-white hover:bg-rose-800">
+            {t("withdrawApplication")}
+          </button>
+        ) : null}
+      >
         {detail && (
           <>
             <p className="text-base font-semibold text-slate-900">{detail.title}</p>
@@ -128,6 +191,15 @@ export default function Applications() {
           </>
         )}
       </DetailModal>
+      <ConfirmModal
+        open={Boolean(withdrawTarget)}
+        title={t("withdrawConfirm")}
+        body={t("withdrawWarning")}
+        confirmLabel={t("withdrawApplication")}
+        danger
+        onCancel={() => setWithdrawTarget(null)}
+        onConfirm={withdrawApplication}
+      />
     </section>
   );
 }

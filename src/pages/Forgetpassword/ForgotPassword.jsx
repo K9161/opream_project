@@ -167,7 +167,7 @@ export default function ForgotPassword() {
 
           <button type="submit" className="submit">{t.submit}</button>
           <button type="button" className="back" onClick={() => navigate('/login')}>
-            <ArrowLeftIcon />{t.back}
+            <span className={lang === 'ar' ? 'back-arrow-rtl' : ''}><ArrowLeftIcon /></span>{t.back}
           </button>
         </form>
       </main>

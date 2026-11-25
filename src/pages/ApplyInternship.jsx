@@ -4,6 +4,23 @@ import { ArrowLeft, ArrowRight, BadgeCheck, CalendarClock, CheckCircle2, CloudUp
 import { useI18n } from "../i18n";
 import ConfirmModal from "../Component/ConfirmModal";
 
+const ACTIVE_SEASON = "Summer 2026";
+const MAX_APPLICATIONS_PER_SEASON = 3;
+
+function readApplications() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("opreamApplications") || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+function isInActiveSeason(application) {
+  // Older locally saved applications did not store their season; count them against the active season.
+  return !application.season || application.season === ACTIVE_SEASON;
+}
+
 export default function ApplyInternship() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -19,6 +36,7 @@ export default function ApplyInternship() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [cvFile, setCvFile] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const applicationsUsed = readApplications().filter(isInActiveSeason).length;
 
   function handleCv(file) {
     if (!file) return;
@@ -36,16 +54,14 @@ export default function ApplyInternship() {
 
   function requestSubmit(event) {
     event.preventDefault();
+    const existing = readApplications();
+    if (existing.filter(isInActiveSeason).length >= MAX_APPLICATIONS_PER_SEASON) {
+      setError(t("applicationCapReached"));
+      return;
+    }
     if (!statement.trim() || !accepted || !cvFile) {
       setError(t("requiredField"));
       return;
-    }
-    let existing;
-    try {
-      const savedApplications = JSON.parse(localStorage.getItem("opreamApplications") || "[]");
-      existing = Array.isArray(savedApplications) ? savedApplications : [];
-    } catch {
-      existing = [];
     }
     if (existing.some((item) => item && String(item.internshipId) === String(id))) {
       setError(t("alreadyApplied"));
@@ -56,6 +72,17 @@ export default function ApplyInternship() {
   }
 
   function submitApplication() {
+    const existing = readApplications();
+    if (existing.filter(isInActiveSeason).length >= MAX_APPLICATIONS_PER_SEASON) {
+      setConfirmOpen(false);
+      setError(t("applicationCapReached"));
+      return;
+    }
+    if (existing.some((item) => item && String(item.internshipId) === String(id))) {
+      setConfirmOpen(false);
+      setError(t("alreadyApplied"));
+      return;
+    }
     const application = {
       internshipId: id,
       title: t("title"),
@@ -67,15 +94,9 @@ export default function ApplyInternship() {
       cv: cvFile.name,
       department: "CS",
       submittedAt: new Date().toISOString(),
+      season: ACTIVE_SEASON,
       status: "submitted",
     };
-    let existing;
-    try {
-      const savedApplications = JSON.parse(localStorage.getItem("opreamApplications") || "[]");
-      existing = Array.isArray(savedApplications) ? savedApplications : [];
-    } catch {
-      existing = [];
-    }
     localStorage.setItem("opreamApplications", JSON.stringify([...existing, application]));
     setConfirmOpen(false);
     setSubmitted(true);
@@ -92,6 +113,7 @@ export default function ApplyInternship() {
 
   return (
     <section className="mx-auto w-full max-w-5xl space-y-5">
+      <p className="text-xs font-medium text-slate-500">{applicationsUsed} / {MAX_APPLICATIONS_PER_SEASON} {t("applicationsUsed")} · {ACTIVE_SEASON}</p>
       <Link to={`/internship/${id}`} className="inline-flex items-center gap-2 text-xs font-medium text-slate-500 no-underline hover:text-blue-700"><ArrowLeft size={14} className={isAr ? "rotate-180" : ""}/>{t("backToDetails")}</Link>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
